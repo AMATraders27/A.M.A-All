@@ -57,14 +57,68 @@ const INITIAL_PROJECTS = [
   }
 ];
 
+const CATEGORY_IMAGES: Record<string, string[]> = {
+  "Watches": [
+    "1523275335684-37898b6baf30",
+    "1547996160-81dfa63595aa",
+    "1508685096489-7aac291ba597",
+    "1614164185128-e4ec99c99dfd",
+    "1526170375885-4d8ecf77b99f",
+    "1524805444758-089113d4836d",
+    "1619134716292-3a742b930279",
+    "1585123334904-845d60e97b29",
+    "1539874754764-5a96559165b0",
+    "1522312346375-d1a52e2b99b3"
+  ],
+  "Footwear": [
+    "1549298916-b41d501d3772",
+    "1614252235316-8c857d38b5f4",
+    "1535043934128-cf0b28d52f95",
+    "1560769629-975ec94e6a86",
+    "1595950653106-6c9ebd614d3a",
+    "1542291026-7eec264c27ff",
+    "1606107557195-0e29a4b5b4aa",
+    "1600185365483-26d7a4cc7519",
+    "1605348532760-6753d2c43329",
+    "1512374382149-433a8e1f719e"
+  ],
+  "Jewelry": [
+    "1605100804763-247f67b3557e",
+    "1515562141207-7a88fb7ce338",
+    "1599643478518-a784e5dc4c8f",
+    "1601121141461-9d6647bca1ed",
+    "1617038220319-276d3cfab4ad",
+    "1535632066927-ab7c9ab60908",
+    "1573408301185-9146fe634ad0",
+    "1602173574767-37ac01473b50",
+    "1611085510592-710bb0af56bc",
+    "1588444833098-422199b78ad4"
+  ],
+  "Accessories": [
+    "1548036328-c9f89a623945",
+    "1594223274512-ad4803739b7c",
+    "1584917865442-de89df764f7a",
+    "1523170335258-f5d60dba7ac7",
+    "1611930022073-b7ad4ba810c0",
+    "1581605405669-f5197f39628a",
+    "1606760227091-3dd870d97f1d",
+    "1566150905-11582347eb50",
+    "1524289286272-d5554bc3eb33",
+    "1598533120915-4215597c8432"
+  ]
+};
+
 // Simulate a massive database of 10M+ items
 const GENERATED_PROJECTS = Array.from({ length: 200 }).map((_, i) => {
   const category = CATEGORIES[1 + (i % (CATEGORIES.length - 1))];
+  const images = CATEGORY_IMAGES[category] || CATEGORY_IMAGES["Watches"];
+  const photoId = images[i % images.length];
+  
   return {
     id: 10 + i,
     title: `${category} Masterpiece No. ${1250 + i}`,
     category,
-    image: `https://images.unsplash.com/photo-${1500000000000 + i}?q=80&w=1200&auto=format&fit=crop&sig=${i}`,
+    image: `https://images.unsplash.com/photo-${photoId}?q=80&w=1200&auto=format&fit=crop&q=100`,
     image_fallback: `https://picsum.photos/seed/ama${i}/1200/1500`,
     brand: "A.M.A Studio",
     description: "An elite addition to our global archive of over 10 million bespoke luxury creations."
@@ -169,8 +223,8 @@ export default function Portfolio() {
               </Badge>
             </div>
             <h1 className="text-7xl md:text-9xl lg:text-[11rem] font-heading font-light italic leading-[0.85] tracking-tighter mb-12">
-              PRODUCT <br />
-              <span className="text-primary not-italic font-bold drop-shadow-[0_0_30px_rgba(255,0,0,0.5)]">MASTERY.</span>
+              IMAGE <br />
+              <span className="text-primary not-italic font-bold drop-shadow-[0_0_30px_rgba(255,0,0,0.5)]">PRODUCERS.</span>
             </h1>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
               <div className="lg:col-span-5">
@@ -215,16 +269,21 @@ export default function Portfolio() {
                   creative engine is dedicated to the world's most elite brands.
                 </p>
                 <p className="text-primary font-medium italic">
-                  "We don't follow trends. We define the standard by which all others are measured."
+                  "Brands can now request our studio to create bespoke, high-end product photography and designs tailored to their unique legacy."
                 </p>
                 <p>
                   Join an exclusive circle of global leaders who trust A.M.A Designers 
                   to protect and project their legacy across every continent.
                 </p>
               </div>
-              <Button size="lg" className="mt-12 bg-primary text-primary-foreground hover:bg-secondary hover:shadow-[0_0_30px_rgba(0,0,255,0.5)] transition-all duration-500 rounded-none h-16 px-12 text-[12px] uppercase tracking-[0.3em] font-bold">
-                Partner With Us
-              </Button>
+              <div className="flex flex-wrap gap-6 mt-12">
+                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-secondary hover:shadow-[0_0_30px_rgba(0,0,255,0.5)] transition-all duration-500 rounded-none h-16 px-12 text-[12px] uppercase tracking-[0.3em] font-bold">
+                  Partner With Us
+                </Button>
+                <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white transition-all duration-500 rounded-none h-16 px-12 text-[12px] uppercase tracking-[0.3em] font-bold">
+                  Request Custom Creation
+                </Button>
+              </div>
             </div>
             <div className="relative aspect-square group">
               <img 
@@ -244,7 +303,7 @@ export default function Portfolio() {
         <div className="max-w-[1600px] mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center mb-24 gap-8">
             <div className="flex flex-col">
-              <h2 className="text-5xl md:text-6xl font-heading font-light italic">The Global Archive</h2>
+              <h2 className="text-5xl md:text-6xl font-heading font-light italic">Our Images</h2>
               <p className="text-muted-foreground mt-4 uppercase tracking-[0.2em] text-[10px]">Displaying curated selection from 10,000,000+ items</p>
             </div>
             <div className="flex flex-wrap justify-center gap-2">
@@ -275,33 +334,54 @@ export default function Portfolio() {
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.5, delay: (index % 4) * 0.05 }}
                 >
-                  <div className="group relative aspect-[3/4] overflow-hidden bg-card border border-border hover:border-secondary/50 transition-colors duration-500">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="object-cover w-full h-full transition-transform duration-1000 group-hover:scale-110 opacity-70 group-hover:opacity-100"
-                      referrerPolicy="no-referrer"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        // @ts-ignore
-                        if (project.image_fallback && target.src !== project.image_fallback) {
-                          // @ts-ignore
-                          target.src = project.image_fallback;
-                        }
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500 flex flex-col justify-end p-8 text-white">
-                      <div className="text-[9px] uppercase tracking-[0.3em] text-primary mb-2 font-bold group-hover:text-secondary transition-colors">{project.brand}</div>
-                      <h3 className="text-2xl font-heading font-light italic mb-3 group-hover:translate-x-2 transition-transform">{project.title}</h3>
-                      <p className="text-xs opacity-70 mb-6 line-clamp-2">{project.description}</p>
-                      <Button variant="outline" className="w-fit rounded-none border-primary/30 h-10 hover:bg-primary hover:text-white hover:border-primary uppercase tracking-widest text-[9px] transition-all">
-                        View Details
-                      </Button>
+                  <div className="group flex flex-col bg-card border border-border hover:border-secondary/50 transition-all duration-500">
+                    <div className="relative aspect-[3/4] overflow-hidden">
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className="object-cover w-full h-full transition-transform duration-1000 group-hover:scale-110 opacity-90 group-hover:opacity-100 brightness-110 contrast-110"
+                          referrerPolicy="no-referrer"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            // @ts-ignore
+                            if (project.image_fallback && target.src !== project.image_fallback) {
+                              // @ts-ignore
+                              target.src = project.image_fallback;
+                            }
+                          }}
+                        />
+                      {/* Studio Original Indicator (Icon Only - No English Words) */}
+                      <div className="absolute top-4 left-4 z-10">
+                        <div className="bg-black/40 backdrop-blur-md border border-white/10 p-2 rounded-full">
+                          <div className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(255,0,0,0.8)]" />
+                        </div>
+                      </div>
                     </div>
-                    <div className="absolute top-4 right-4">
-                      <Badge className="bg-secondary/80 backdrop-blur-md border-secondary/20 text-white rounded-none uppercase tracking-widest text-[8px] px-2 shadow-[0_0_10px_rgba(0,0,255,0.5)]">
-                        {project.category}
-                      </Badge>
+
+                    <div className="p-6 space-y-4 bg-card">
+                      <div className="flex justify-between items-start gap-4">
+                        <div>
+                          <h3 className="text-xl font-heading font-light italic leading-tight">{project.title}</h3>
+                          <div className="text-[9px] uppercase tracking-[0.3em] text-primary mt-1 font-bold">{project.brand}</div>
+                        </div>
+                        <Badge className="bg-secondary/20 text-secondary-foreground border-secondary/30 rounded-none uppercase tracking-widest text-[8px] px-2 whitespace-nowrap">
+                          {project.category}
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground line-clamp-2 font-light leading-relaxed">
+                        {project.description}
+                      </p>
+                      <div className="pt-2">
+                        <Button 
+                          variant="outline" 
+                          className="w-full rounded-none border-primary/30 h-12 hover:bg-primary hover:text-white hover:border-primary uppercase tracking-[0.2em] text-[9px] transition-all duration-500 group/btn"
+                          onClick={() => {
+                            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                          }}
+                        >
+                          Request Admin to Create This <ArrowRight className="ml-2 w-3 h-3 transition-transform group-hover/btn:translate-x-1" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
