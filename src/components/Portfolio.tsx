@@ -1,386 +1,264 @@
-import { useState, FormEvent } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
+import { 
+  Search, 
+  Menu, 
+  Star, 
+  MessageCircle, 
+  Phone, 
+  Mail, 
+  Copy,
+  ChevronRight,
+  ShieldCheck,
+  TrendingUp,
+  Clock,
+  Video,
+  Monitor,
+  Code2
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Mail, MapPin, Phone, ArrowRight, ChevronDown, Sparkles } from "lucide-react";
-
-const CATEGORIES = ["All", "Watches", "Footwear", "Jewelry", "Accessories"];
-
-const INITIAL_PROJECTS = [
-  {
-    id: 1,
-    title: "The Obsidian Chrono",
-    category: "Watches",
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1200&auto=format&fit=crop",
-    brand: "A.M.A Studio",
-    description: "Bespoke timepiece design featuring a matte obsidian finish and sapphire crystal."
-  },
-  {
-    id: 2,
-    title: "Velvet Strider",
-    category: "Footwear",
-    image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1200&auto=format&fit=crop",
-    brand: "A.M.A Studio",
-    description: "Hand-crafted Italian leather sneakers with a minimalist velvet accent."
-  },
-  {
-    id: 3,
-    title: "The Celestial Ring",
-    category: "Jewelry",
-    image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1200&auto=format&fit=crop",
-    brand: "A.M.A Studio",
-    description: "Platinum band set with a rare celestial blue diamond, curated in our London studio."
-  },
-  {
-    id: 4,
-    title: "Midnight Navigator",
-    category: "Watches",
-    image: "https://images.unsplash.com/photo-1547996160-81dfa63595aa?q=80&w=1200&auto=format&fit=crop",
-    brand: "A.M.A Studio",
-    description: "A professional-grade diving watch engineered for precision and elegance."
-  },
-  {
-    id: 5,
-    title: "Azure Oxford",
-    category: "Footwear",
-    image: "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?q=80&w=1200&auto=format&fit=crop",
-    brand: "A.M.A Studio",
-    description: "Classic oxford silhouette reimagined with a contemporary azure patina."
-  },
-  {
-    id: 6,
-    title: "The Sovereign Cuff",
-    category: "Jewelry",
-    image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1200&auto=format&fit=crop",
-    brand: "A.M.A Studio",
-    description: "18k gold cuff with intricate hand-engraved patterns, a studio masterpiece."
-  }
-];
-
-const CATEGORY_IMAGES: Record<string, string[]> = {
-  "Watches": [
-    "1523275335684-37898b6baf30",
-    "1547996160-81dfa63595aa",
-    "1508685096489-7aac291ba597",
-    "1614164185128-e4ec99c99dfd",
-    "1526170375885-4d8ecf77b99f",
-    "1524805444758-089113d4836d",
-    "1619134716292-3a742b930279",
-    "1585123334904-845d60e97b29",
-    "1539874754764-5a96559165b0",
-    "1522312346375-d1a52e2b99b3"
-  ],
-  "Footwear": [
-    "1549298916-b41d501d3772",
-    "1614252235316-8c857d38b5f4",
-    "1535043934128-cf0b28d52f95",
-    "1560769629-975ec94e6a86",
-    "1595950653106-6c9ebd614d3a",
-    "1542291026-7eec264c27ff",
-    "1606107557195-0e29a4b5b4aa",
-    "1600185365483-26d7a4cc7519",
-    "1605348532760-6753d2c43329",
-    "1512374382149-433a8e1f719e"
-  ],
-  "Jewelry": [
-    "1605100804763-247f67b3557e",
-    "1515562141207-7a88fb7ce338",
-    "1599643478518-a784e5dc4c8f",
-    "1601121141461-9d6647bca1ed",
-    "1617038220319-276d3cfab4ad",
-    "1535632066927-ab7c9ab60908",
-    "1573408301185-9146fe634ad0",
-    "1602173574767-37ac01473b50",
-    "1611085510592-710bb0af56bc",
-    "1588444833098-422199b78ad4"
-  ],
-  "Accessories": [
-    "1548036328-c9f89a623945",
-    "1594223274512-ad4803739b7c",
-    "1584917865442-de89df764f7a",
-    "1523170335258-f5d60dba7ac7",
-    "1611930022073-b7ad4ba810c0",
-    "1581605405669-f5197f39628a",
-    "1606760227091-3dd870d97f1d",
-    "1566150905-11582347eb50",
-    "1524289286272-d5554bc3eb33",
-    "1598533120915-4215597c8432"
-  ]
-};
-
-// Simulate a massive database of 10M+ items
-const GENERATED_PROJECTS = Array.from({ length: 200 }).map((_, i) => {
-  const category = CATEGORIES[1 + (i % (CATEGORIES.length - 1))];
-  const images = CATEGORY_IMAGES[category] || CATEGORY_IMAGES["Watches"];
-  const photoId = images[i % images.length];
-  
-  return {
-    id: 10 + i,
-    title: `${category} Masterpiece No. ${1250 + i}`,
-    category,
-    image: `https://images.unsplash.com/photo-${photoId}?q=80&w=1200&auto=format&fit=crop&q=100`,
-    image_fallback: `https://picsum.photos/seed/ama${i}/1200/1500`,
-    brand: "A.M.A Studio",
-    description: "An elite addition to our global archive of over 10 million bespoke luxury creations."
-  };
-});
-
-const ALL_PROJECTS = [...INITIAL_PROJECTS, ...GENERATED_PROJECTS];
+import { Product } from "@/src/types";
 
 export default function Portfolio() {
+  const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState("All");
-  const [visibleCount, setVisibleCount] = useState(12);
-  const [isLoading, setIsLoading] = useState(false);
-  const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [copiedText, setCopiedText] = useState<string|null>(null);
 
-  const filteredProjects = ALL_PROJECTS.filter(p => filter === "All" || p.category === filter);
-  const visibleProjects = filteredProjects.slice(0, visibleCount);
+  const categories = [
+    "All"
+  ];
 
-  const handleLoadMore = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setVisibleCount(prev => prev + 12);
-      setIsLoading(false);
-    }, 1000);
-  };
+  useEffect(() => {
+    fetchProducts();
+  }, [filter, searchQuery]);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setFormStatus("submitting");
-    const formData = new FormData(e.currentTarget);
-    
+  const fetchProducts = async () => {
+    setLoading(true);
     try {
-      const response = await fetch("https://formspree.io/f/xgorojaa", {
-        method: "POST",
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
-      
-      if (response.ok) {
-        setFormStatus("success");
-        (e.target as HTMLFormElement).reset();
-      } else {
-        setFormStatus("error");
-      }
+      const response = await fetch(`/api/products?category=${filter}&q=${searchQuery}&page=1&limit=12`);
+      const data = await response.json();
+      setProducts(data);
+      setPage(1);
     } catch (error) {
-      setFormStatus("error");
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  const loadMore = async () => {
+    setLoading(true);
+    try {
+      const nextPage = page + 1;
+      // We explicitly send limit/offset or page. Since the server now supports 'page', we'll use that.
+      const response = await fetch(`/api/products?category=${filter}&q=${searchQuery}&page=${nextPage}&limit=12`);
+      const data = await response.json();
+      
+      // Filter out any potential duplicates by ID just in case
+      setProducts(prev => {
+        const existingIds = new Set(prev.map(p => p.id));
+        const newItems = data.filter((p: Product) => !existingIds.has(p.id));
+        return [...prev, ...newItems];
+      });
+      setPage(nextPage);
+    } catch (error) {
+      console.error("Error loading more:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const copyToClipboard = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedText(label);
+    setTimeout(() => setCopiedText(null), 2000);
+  };
+
+  const handleOrderViaWhatsApp = (product: Product) => {
+    const message = `Hello A.M.A Freelancing, I am interested in your service: ${product.title}. Can we discuss the details?`;
+    const whatsappUrl = `https://wa.me/9203054242038?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 border-b border-border bg-background/90 backdrop-blur-xl">
-        <div className="max-w-[1600px] mx-auto px-8 h-24 flex items-center justify-between">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-3"
-          >
-            <div className="w-10 h-10 bg-primary flex items-center justify-center text-primary-foreground font-heading font-bold text-xl">A</div>
-            <div className="text-2xl font-heading font-light tracking-[0.2em] uppercase">
-              A.M.A DESIGNERS
+    <div className="min-h-screen bg-background font-sans selection:bg-green-500 selection:text-white">
+      {/* Top Header Contact Bar */}
+      <div className="bg-black text-white py-2 px-4 sticky top-0 z-[100] border-b border-white/5">
+        <div className="max-w-[1600px] mx-auto flex justify-center sm:justify-between items-center text-[10px] sm:text-xs font-medium uppercase tracking-[0.2em]">
+          <div className="hidden sm:flex items-center gap-6">
+            <span className="text-gray-500 italic">Professional Freelance Services</span>
+            <div className="flex items-center gap-2 text-green-500">
+              <ShieldCheck className="w-3 h-3" />
+              <span>A.M.A Verified Provider</span>
             </div>
-          </motion.div>
-          <div className="hidden lg:flex items-center gap-12 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            <a href="#archive" className="hover:text-primary transition-colors relative group">Archive</a>
-            <button onClick={() => setFilter("Watches")} className="hover:text-primary transition-colors relative group uppercase">Watches</button>
-            <button onClick={() => setFilter("Footwear")} className="hover:text-primary transition-colors relative group uppercase">Footwear</button>
-            <a href="#partnership" className="hover:text-primary transition-colors relative group">Partnership</a>
-            <a href="#contact" className="hover:text-primary transition-colors relative group">Contact</a>
           </div>
           <div className="flex items-center gap-6">
-            <div className="hidden sm:flex flex-col items-end text-[10px] uppercase tracking-widest opacity-60">
-              <span>Main Office</span>
-              <span className="font-bold text-foreground">Mayfair, London</span>
+            <div className="flex items-center gap-2 cursor-pointer hover:text-green-500 transition-colors relative" onClick={() => copyToClipboard("9203054242038", "Phone")}>
+              <Phone className="w-3 h-3" />
+              <span>9203054242038</span>
+              {copiedText === "Phone" && <span className="absolute -bottom-6 left-0 text-green-500 font-bold animate-bounce">Copied!</span>}
             </div>
-            <Button className="rounded-none px-10 h-12 bg-foreground text-background hover:bg-primary hover:text-primary-foreground transition-all duration-500 uppercase tracking-widest text-[11px]">
-              Inquiry
-            </Button>
+            <div className="flex items-center gap-2 cursor-pointer hover:text-green-500 transition-colors relative" onClick={() => copyToClipboard("allahmuhammadmakkah786@gmail.com", "Email")}>
+              <Mail className="w-3 h-3" />
+              <span className="lowercase hidden md:inline">allahmuhammadmakkah786@gmail.com</span>
+              <span className="md:hidden">Email A.M.A</span>
+              {copiedText === "Email" && <span className="absolute -bottom-6 left-0 text-green-500 font-bold animate-bounce">Copied!</span>}
+            </div>
           </div>
+        </div>
+      </div>
+
+      {/* Navbar */}
+      <nav className="fixed top-8 sm:top-10 w-full z-50 bg-[#131921] text-white">
+        <div className="max-w-[1600px] mx-auto px-4 h-16 flex items-center gap-6">
+          <Link to="/" className="flex items-center gap-2 group">
+            <div className="w-8 h-8 bg-green-500 flex items-center justify-center text-white font-bold rounded italic">A</div>
+            <span className="text-xl font-bold tracking-tight hidden sm:block italic">A.M.A Freelancing</span>
+          </Link>
+          
+          <div className="flex-1 max-w-2xl relative hidden md:block">
+            <input 
+              type="text" 
+              placeholder="Search for any service from A.M.A..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full h-10 px-4 rounded-md text-black focus:outline-none placeholder:italic"
+            />
+          </div>
+
+          <div className="flex items-center gap-8 ml-auto text-sm font-medium">
+            {/* Direct Chat Removed as requested */}
+          </div>
+        </div>
+        
+        {/* Categories Bar */}
+        <div className="bg-[#232f3e] h-10 flex items-center px-4 text-sm font-medium">
+          <button 
+            onClick={() => setFilter("All")}
+            className={`flex items-center gap-1 hover:border border-white p-1 whitespace-nowrap ${filter === "All" ? 'border-white' : 'border-transparent'}`}
+          >
+            <Menu className="w-5 h-5" /> All Services
+          </button>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative pt-48 pb-32 px-8 overflow-hidden">
-        <div className="absolute top-0 right-0 w-full h-full opacity-20 pointer-events-none">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,255,0.15),transparent_70%)]" />
-          <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_20%,rgba(255,0,0,0.1),transparent_50%)]" />
-          <Sparkles className="w-full h-full text-primary/20" />
+      {/* Hero */}
+      <section className="pt-26 relative">
+        <div className="absolute inset-0 h-[600px] overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2000&auto=format&fit=crop" 
+            className="w-full h-full object-cover opacity-30 grayscale"
+            referrerPolicy="no-referrer"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/80 to-background" />
         </div>
-        <div className="max-w-[1600px] mx-auto relative">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+        
+        <div className="max-w-[1500px] mx-auto px-4 relative pt-32 pb-24 text-center">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="max-w-3xl mx-auto"
           >
-            <div className="flex items-center gap-4 mb-8">
-              <div className="h-[1px] w-12 bg-primary shadow-[0_0_10px_rgba(255,0,0,0.8)]" />
-              <Badge variant="outline" className="px-6 py-1.5 rounded-none uppercase tracking-[0.4em] text-[10px] border-primary/50 text-primary shadow-[0_0_15px_rgba(255,0,0,0.3)]">
-                10,000,000+ Bespoke Creations
-              </Badge>
-            </div>
-            <h1 className="text-7xl md:text-9xl lg:text-[11rem] font-heading font-light italic leading-[0.85] tracking-tighter mb-12">
-              IMAGE <br />
-              <span className="text-primary not-italic font-bold drop-shadow-[0_0_30px_rgba(255,0,0,0.5)]">PRODUCERS.</span>
+            <Badge className="bg-green-500 mb-6 rounded-none px-6 py-2 uppercase tracking-[0.3em] text-[10px]">Professional Excellence</Badge>
+            <h1 className="text-6xl md:text-8xl font-black mb-8 italic tracking-tighter text-white">
+              A.M.A <br /><span className="text-green-500 not-italic uppercase tracking-widest block mt-4 text-4xl md:text-5xl">FREELANCING</span>
             </h1>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
-              <div className="lg:col-span-5">
-                <p className="text-xl md:text-2xl text-muted-foreground font-light leading-relaxed">
-                  Headquartered in London, A.M.A Designers Studio manages a global 
-                  archive of over 10 million luxury products. We define the 
-                  absolute pinnacle of artistic and technical excellence.
-                </p>
-              </div>
-              <div className="lg:col-span-7 flex flex-wrap gap-8 justify-end">
-                <div className="text-right group">
-                  <div className="text-4xl font-heading font-bold text-secondary group-hover:text-primary transition-colors duration-500">10M+</div>
-                  <div className="text-[10px] uppercase tracking-widest opacity-50">Archived Designs</div>
-                </div>
-                <div className="text-right group">
-                  <div className="text-4xl font-heading font-bold text-secondary group-hover:text-primary transition-colors duration-500">LONDON</div>
-                  <div className="text-[10px] uppercase tracking-widest opacity-50">Main Headquarters</div>
-                </div>
-              </div>
-            </div>
+            <p className="text-xl text-gray-400 mb-12 font-light italic max-w-xl mx-auto leading-relaxed">
+              Bespoke digital solutions crafted with precision and professional integrity by A.M.A. 
+            </p>
+            <Button onClick={() => window.scrollTo({ top: 600, behavior: 'smooth' })} size="lg" className="rounded-none px-16 h-16 bg-white text-black hover:bg-green-500 hover:text-white transition-all font-black uppercase tracking-widest text-[12px] border-none shadow-2xl">
+              Explore Services
+            </Button>
           </motion.div>
         </div>
       </section>
 
-      {/* Brand Partnership Section */}
-      <section id="partnership" className="py-32 px-8 bg-foreground text-background relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-secondary/20 via-background to-primary/20 opacity-50" />
-        <div className="max-w-[1600px] mx-auto relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-            <div>
-              <Badge variant="outline" className="mb-8 px-6 py-1.5 rounded-none uppercase tracking-[0.4em] text-[10px] border-primary/30 text-primary">
-                Brand Partnership
-              </Badge>
-              <h2 className="text-5xl md:text-7xl font-heading font-light italic mb-10 leading-tight">
-                Elevating Global <br />
-                <span className="text-primary not-italic font-bold tracking-tighter">IDENTITIES.</span>
+      {/* Main Grid Section */}
+      <div className="bg-background">
+        {/* Product Grid */}
+        <section className="max-w-[1500px] mx-auto px-4 py-12">
+          <div className="flex items-center justify-between mb-12">
+            <div className="space-y-1">
+              <h2 className="text-3xl font-bold tracking-tight italic">
+                {searchQuery ? `Searching for "${searchQuery}"` : "Infinite Gigs"}
               </h2>
-              <div className="space-y-8 text-xl font-light opacity-80 leading-relaxed">
-                <p>
-                  In the world of ultra-luxury, mediocrity is the enemy. A.M.A Designers 
-                  doesn't just create visuals; we engineer desire. Our London-based 
-                  creative engine is dedicated to the world's most elite brands.
-                </p>
-                <p className="text-primary font-medium italic">
-                  "Brands can now request our studio to create bespoke, high-end product photography and designs tailored to their unique legacy."
-                </p>
-                <p>
-                  Join an exclusive circle of global leaders who trust A.M.A Designers 
-                  to protect and project their legacy across every continent.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-6 mt-12">
-                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-secondary hover:shadow-[0_0_30px_rgba(0,0,255,0.5)] transition-all duration-500 rounded-none h-16 px-12 text-[12px] uppercase tracking-[0.3em] font-bold">
-                  Partner With Us
-                </Button>
-                <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white transition-all duration-500 rounded-none h-16 px-12 text-[12px] uppercase tracking-[0.3em] font-bold">
-                  Request Custom Creation
-                </Button>
-              </div>
+              <p className="text-xs text-muted-foreground uppercase tracking-widest">
+                Exploring 10M+ Services in {filter}
+              </p>
             </div>
-            <div className="relative aspect-square group">
-              <img 
-                src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop" 
-                alt="Luxury Office" 
-                className="object-cover w-full h-full opacity-60 grayscale group-hover:grayscale-0 transition-all duration-1000"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 border-[20px] border-primary/20 m-8 pointer-events-none group-hover:border-secondary/30 transition-colors duration-1000" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Portfolio Section */}
-      <section id="archive" className="py-32 px-8 bg-secondary/50">
-        <div className="max-w-[1600px] mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-24 gap-8">
-            <div className="flex flex-col">
-              <h2 className="text-5xl md:text-6xl font-heading font-light italic">Our Images</h2>
-              <p className="text-muted-foreground mt-4 uppercase tracking-[0.2em] text-[10px]">Displaying curated selection from 10,000,000+ items</p>
-            </div>
-            <div className="flex flex-wrap justify-center gap-2">
-              {CATEGORIES.map(cat => (
-                <button
-                  key={cat}
-                  onClick={() => { setFilter(cat); setVisibleCount(12); }}
-                  className={`px-8 py-3 text-[10px] uppercase tracking-[0.2em] transition-all border ${
-                    filter === cat 
-                    ? "bg-primary border-primary text-primary-foreground" 
-                    : "bg-transparent border-border hover:border-primary text-muted-foreground hover:text-primary"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
+            <div className="h-[2px] flex-1 bg-border mx-8 hidden sm:block" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             <AnimatePresence mode="popLayout">
-              {visibleProjects.map((project, index) => (
+              {products.map((product) => (
                 <motion.div
-                  key={project.id}
+                  key={product.id}
                   layout
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.5, delay: (index % 4) * 0.05 }}
+                  className="bg-white group overflow-hidden border border-border hover:shadow-2xl transition-all duration-300 flex flex-col"
                 >
-                  <div className="group flex flex-col bg-card border border-border hover:border-secondary/50 transition-all duration-500">
-                    <div className="relative aspect-[3/4] overflow-hidden">
-                        <img
-                          src={project.image}
-                          alt={project.title}
-                          className="object-cover w-full h-full transition-transform duration-1000 group-hover:scale-110 opacity-90 group-hover:opacity-100 brightness-110 contrast-110"
-                          referrerPolicy="no-referrer"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            // @ts-ignore
-                            if (project.image_fallback && target.src !== project.image_fallback) {
-                              // @ts-ignore
-                              target.src = project.image_fallback;
-                            }
-                          }}
-                        />
-                      {/* Studio Original Indicator (Icon Only - No English Words) */}
-                      <div className="absolute top-4 left-4 z-10">
-                        <div className="bg-black/40 backdrop-blur-md border border-white/10 p-2 rounded-full">
-                          <div className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(255,0,0,0.8)]" />
-                        </div>
+                  <div className="relative aspect-square overflow-hidden bg-gray-50">
+                    <Link to={`/product/${product.id}`} className="relative block h-full">
+                      <img 
+                        src={product.images[0]} 
+                        alt={product.title} 
+                        className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
+                        referrerPolicy="no-referrer"
+                      />
+                      {/* A.M.A Professional Watermark Overlay */}
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity">
+                        <span className="text-4xl font-black italic tracking-widest text-[#131921] rotate-[-45deg] select-none">A.M.A PROFESSIONAL</span>
                       </div>
+                    </Link>
+                    <div className="absolute top-4 right-4 space-y-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button size="icon" variant="secondary" className="rounded-full shadow-lg">
+                        <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                      </Button>
+                    </div>
+                    <Badge className="absolute top-4 left-4 rounded-none bg-black/80 text-white border-0">
+                      {product.category}
+                    </Badge>
+                  </div>
+
+                  <div className="p-6 flex-1 flex flex-col bg-black text-white">
+                    <div className="flex justify-between items-start gap-4 mb-2">
+                      <Link to={`/product/${product.id}`} className="hover:text-primary transition-colors">
+                        <h3 className="text-lg font-bold italic leading-tight line-clamp-2">{product.title}</h3>
+                      </Link>
+                    </div>
+                    
+                    <div className="flex items-center gap-1 mb-4">
+                      {[1, 2, 3, 4, 5].map(i => (
+                        <Star key={i} className={`w-3 h-3 ${i <= 4 ? 'text-yellow-500 fill-yellow-500' : 'text-gray-600'}`} />
+                      ))}
+                      <span className="text-[10px] text-gray-500 ml-2">(4.8/5)</span>
                     </div>
 
-                    <div className="p-6 space-y-4 bg-card">
-                      <div className="flex justify-between items-start gap-4">
-                        <div>
-                          <h3 className="text-xl font-heading font-light italic leading-tight">{project.title}</h3>
-                          <div className="text-[9px] uppercase tracking-[0.3em] text-primary mt-1 font-bold">{project.brand}</div>
-                        </div>
-                        <Badge className="bg-secondary/20 text-secondary-foreground border-secondary/30 rounded-none uppercase tracking-widest text-[8px] px-2 whitespace-nowrap">
-                          {project.category}
-                        </Badge>
+                    <div className="mt-auto">
+                      <div className="flex items-baseline gap-2 mb-6">
+                        <span className="text-xs text-green-500 font-bold uppercase tracking-widest">Available for Hire</span>
                       </div>
-                      <p className="text-xs text-muted-foreground line-clamp-2 font-light leading-relaxed">
-                        {project.description}
-                      </p>
-                      <div className="pt-2">
+
+                      <div className="grid grid-cols-1 gap-2">
                         <Button 
-                          variant="outline" 
-                          className="w-full rounded-none border-primary/30 h-12 hover:bg-primary hover:text-white hover:border-primary uppercase tracking-[0.2em] text-[9px] transition-all duration-500 group/btn"
-                          onClick={() => {
-                            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                          }}
+                          onClick={() => handleOrderViaWhatsApp(product)}
+                          className="w-full rounded-none bg-green-600 hover:bg-green-700 text-white text-[10px] uppercase tracking-widest h-12 flex items-center justify-center gap-2"
                         >
-                          Request Admin to Create This <ArrowRight className="ml-2 w-3 h-3 transition-transform group-hover/btn:translate-x-1" />
+                          <MessageCircle className="w-4 h-4" /> Message Seller
                         </Button>
+                        <Link to={`/product/${product.id}`} className="block">
+                          <Button variant="outline" className="w-full rounded-none border-white/20 text-white hover:bg-white/10 text-[10px] uppercase tracking-widest h-10">
+                            View Details
+                          </Button>
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -389,185 +267,56 @@ export default function Portfolio() {
             </AnimatePresence>
           </div>
 
-          {visibleCount < filteredProjects.length && (
-            <div className="mt-24 flex flex-col items-center gap-6">
-              <p className="text-[10px] uppercase tracking-[0.4em] text-muted-foreground opacity-50">
-                Endless Archive • {ALL_PROJECTS.length} Selected • 10M+ Total
-              </p>
+          {products.length > 0 && (
+            <div className="mt-16 flex flex-col items-center gap-6">
+              <div className="flex items-center gap-4 w-full">
+                <div className="h-[1px] flex-1 bg-border" />
+                <p className="text-[10px] uppercase tracking-[0.5em] text-gray-400">Deep Archive Access</p>
+                <div className="h-[1px] flex-1 bg-border" />
+              </div>
               <Button 
-                onClick={handleLoadMore} 
-                disabled={isLoading}
-                variant="outline" 
-                className="rounded-none px-16 h-16 border-primary/30 hover:border-primary text-[12px] uppercase tracking-[0.3em] group"
+                onClick={loadMore}
+                disabled={loading}
+                className="rounded-none bg-black text-white px-12 h-14 uppercase tracking-[0.3em] font-bold text-xs hover:bg-primary transition-all shadow-xl disabled:opacity-50"
               >
-                {isLoading ? "Accessing Archive..." : (
-                  <>
-                    Load More Items <ChevronDown className="ml-2 w-4 h-4 transition-transform group-hover:translate-y-1" />
-                  </>
-                )}
+                {loading ? "Discovering..." : "Load More Excellence"}
               </Button>
             </div>
           )}
-        </div>
-      </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-40 px-8 border-t border-border relative overflow-hidden">
-        <div className="absolute bottom-0 left-0 w-full h-1/2 bg-primary/5 -z-10 skew-y-3" />
-        <div className="max-w-[1600px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-32">
-            <div>
-              <Badge variant="outline" className="mb-8 px-6 py-1.5 rounded-none uppercase tracking-[0.4em] text-[10px] border-primary/30 text-primary">
-                Global Concierge
-              </Badge>
-              <h2 className="text-6xl md:text-8xl font-heading font-light italic mb-12 leading-[0.9]">
-                Connect with <br />
-                <span className="text-primary not-italic font-bold">LONDON HQ</span>
-              </h2>
-              <div className="space-y-12 mt-16">
-                <div className="flex items-start gap-8 group">
-                  <div className="w-16 h-16 rounded-none bg-primary flex items-center justify-center text-primary-foreground transition-transform group-hover:rotate-12">
-                    <Mail className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-2">Global Inquiries</div>
-                    <a href="mailto:allahmuhammadmakkah786@gmail.com" className="text-2xl font-light hover:text-primary transition-colors">
-                      allahmuhammadmakkah786@gmail.com
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-8 group">
-                  <div className="w-16 h-16 rounded-none bg-primary flex items-center justify-center text-primary-foreground transition-transform group-hover:rotate-12">
-                    <Phone className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-2">Direct Line</div>
-                    <a href="tel:03054224038" className="text-2xl font-light hover:text-primary transition-colors">
-                      03054224038
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-8 group">
-                  <div className="w-16 h-16 rounded-none bg-primary flex items-center justify-center text-primary-foreground transition-transform group-hover:rotate-12">
-                    <MapPin className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-2">Main Studio</div>
-                    <div className="text-2xl font-light">Mayfair, London, W1K</div>
-                  </div>
-                </div>
-              </div>
+          {products.length === 0 && !loading && (
+            <div className="text-center py-24 bg-gray-50 border border-dashed border-gray-300">
+              <h3 className="text-2xl font-bold italic mb-2">No items matching your request</h3>
+              <p className="text-muted-foreground font-light italic">The archive is vast, but "${searchQuery}" remains elusive. <br /> Try a broader search term.</p>
             </div>
-            <div className="bg-card p-12 md:p-20 border border-border shadow-2xl relative">
-              <div className="absolute top-0 right-0 p-8 opacity-10">
-                <Sparkles className="w-24 h-24" />
-              </div>
-              {formStatus === "success" ? (
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="h-full flex flex-col items-center justify-center text-center space-y-8"
-                >
-                  <div className="w-24 h-24 rounded-none bg-primary flex items-center justify-center text-primary-foreground">
-                    <Sparkles className="w-12 h-12" />
-                  </div>
-                  <h3 className="text-4xl font-heading italic">Inquiry Received</h3>
-                  <p className="text-muted-foreground max-w-md">
-                    Our London HQ concierge has received your vision. We will reach out to you within 24 hours to discuss the next steps of your ultra-luxury project.
-                  </p>
-                  <Button 
-                    onClick={() => setFormStatus("idle")}
-                    variant="outline" 
-                    className="rounded-none uppercase tracking-widest px-12"
-                  >
-                    Send Another
-                  </Button>
-                </motion.div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-10">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div className="space-y-3">
-                      <label className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Your Name</label>
-                      <input 
-                        name="name"
-                        type="text" 
-                        required
-                        className="w-full bg-transparent border-b border-border py-3 focus:outline-none focus:border-primary transition-colors text-lg font-light" 
-                        placeholder="Full Name" 
-                      />
-                    </div>
-                    <div className="space-y-3">
-                      <label className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Email Address</label>
-                      <input 
-                        name="email"
-                        type="email" 
-                        required
-                        className="w-full bg-transparent border-b border-border py-3 focus:outline-none focus:border-primary transition-colors text-lg font-light" 
-                        placeholder="email@luxury.com" 
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <label className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Brand / Project</label>
-                    <input 
-                      name="brand"
-                      type="text" 
-                      className="w-full bg-transparent border-b border-border py-3 focus:outline-none focus:border-primary transition-colors text-lg font-light" 
-                      placeholder="Project Vision" 
-                    />
-                  </div>
-                  <div className="space-y-3">
-                    <label className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Message</label>
-                    <textarea 
-                      name="message"
-                      rows={4} 
-                      required
-                      className="w-full bg-transparent border-b border-border py-3 focus:outline-none focus:border-primary transition-colors resize-none text-lg font-light" 
-                      placeholder="Describe your ultra-luxury requirements..."
-                    ></textarea>
-                  </div>
-                  {formStatus === "error" && (
-                    <p className="text-primary text-xs uppercase tracking-widest">Something went wrong. Please try again or contact us directly.</p>
-                  )}
-                  <Button 
-                    type="submit"
-                    disabled={formStatus === "submitting"}
-                    size="lg" 
-                    className="w-full bg-foreground text-background hover:bg-primary hover:text-primary-foreground rounded-none h-20 text-[14px] uppercase tracking-[0.4em] font-bold transition-all duration-700"
-                  >
-                    {formStatus === "submitting" ? "Transmitting..." : "Send Global Inquiry"}
-                  </Button>
-                </form>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
+          )}
+        </section>
 
-      {/* Footer */}
-      <footer className="py-20 px-8 border-t border-border bg-secondary/30">
-        <div className="max-w-[1600px] mx-auto">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-12 mb-20">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-primary flex items-center justify-center text-primary-foreground font-heading font-bold text-2xl">A</div>
-              <div className="text-3xl font-heading font-light tracking-[0.3em] uppercase">A.M.A DESIGNERS</div>
+        {/* Footer */}
+        <footer className="bg-[#131921] text-white pt-12 pb-6 px-4">
+          <div className="max-w-[1500px] mx-auto text-center border-b border-white/10 pb-12 mb-6">
+            <div className="w-12 h-12 bg-green-500 flex items-center justify-center text-white font-bold rounded mx-auto mb-4 text-2xl italic">A</div>
+            <h2 className="text-2xl font-bold tracking-widest uppercase italic mb-4">A.M.A Freelancing</h2>
+            <div className="flex flex-wrap justify-center gap-8 text-[10px] text-gray-400 uppercase tracking-widest font-bold">
+              <Link to="/" className="hover:text-green-500 transition-colors">Home</Link>
+              <Link to="/products" className="hover:text-green-500 transition-colors">Services</Link>
+              <Link to="/contact" className="hover:text-green-500 transition-colors">Contact A.M.A</Link>
             </div>
-            <div className="flex flex-wrap gap-12 text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-              <span className="flex items-center"><span className="text-primary mr-3">●</span>Ultra Luxury Standards</span>
-              <span className="flex items-center"><span className="text-primary mr-3">●</span>Global Brand Excellence</span>
-              <span className="flex items-center"><span className="text-primary mr-3">●</span>Bespoke Design Solutions</span>
-            </div>
-          </div>
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8 pt-12 border-t border-border/50 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-            <div>&copy; 2024 A.M.A Designers Portfolio. All Rights Reserved.</div>
-            <div className="flex gap-10">
-              <a href="#" className="hover:text-primary transition-colors">Privacy</a>
-              <a href="#" className="hover:text-primary transition-colors">Terms</a>
-              <a href="#" className="hover:text-primary transition-colors">Cookie Policy</a>
+            <div className="mt-8 text-xs text-gray-500 space-y-2">
+              <p>Phone: 9203054242038</p>
+              <p>Email: allahmuhammadmakkah786@gmail.com</p>
             </div>
           </div>
-        </div>
-      </footer>
+          <div className="max-w-[1500px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-gray-500 uppercase tracking-widest">
+            <p>© 2026 A.M.A Freelancing Network. Professional Pakistani Excellence.</p>
+            <div className="flex gap-6">
+              <span>Privacy Policy</span>
+              <span>Terms of Service</span>
+              <span>Safety Guide</span>
+            </div>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }
