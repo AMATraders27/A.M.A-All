@@ -60,6 +60,15 @@ async function startServer() {
   // API Routes
   app.get("/api/products", (req, res) => {
     const query = (req.query.q as string || "").toLowerCase();
+    const queryKeywords = query.split(/\s+/).filter(k => k.length > 2);
+    
+    const matchesQuery = (text: string) => {
+      if (!query) return true;
+      const lowerText = text.toLowerCase();
+      if (lowerText.includes(query)) return true;
+      return queryKeywords.some(kw => lowerText.includes(kw));
+    };
+
     const categoryFilter = (req.query.category as string || "All");
     const limit = parseInt(req.query.limit as string) || 12;
     // Calculate offset based on 'page' if provided, otherwise use 'offset'
@@ -144,7 +153,7 @@ async function startServer() {
     let results: any[] = [];
     const baseGigsFiltered = baseGigs.filter(g => 
       (categoryFilter === "All" || g.category === categoryFilter) &&
-      (g.title.toLowerCase().includes(query) || g.description.toLowerCase().includes(query))
+      (matchesQuery(g.title) || matchesQuery(g.description))
     );
 
     // To ensure "Load More" works correctly, we generate from a consistent virtual list
@@ -160,7 +169,7 @@ async function startServer() {
       // Ensure we don't pick a gig that's already in the baseGigsFiltered (by title)
       const isDuplicate = baseGigsFiltered.some(bg => bg.title === g.title);
       
-      if (!isDuplicate && g.title.toLowerCase().includes(query) && (categoryFilter === "All" || g.category === categoryFilter)) {
+      if (!isDuplicate && (matchesQuery(g.title) || matchesQuery(g.description)) && (categoryFilter === "All" || g.category === categoryFilter)) {
         pool.push(g);
       }
       i++;
