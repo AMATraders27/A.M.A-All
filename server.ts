@@ -69,57 +69,27 @@ async function startServer() {
       offset = (page - 1) * limit;
     }
 
-    // Curated Freelance Services (Gigs)
+    // Curated High-Demand Global Services
     const baseGigs = [
       { 
-        id: "g1", 
-        title: "A.M.A will design a modern minimalist logo for your brand", 
-        description: "Transform your brand identity with A.M.A's premium minimalist logo design. Our script focuses on architectural symmetry and timeless elegance, ensuring your business stands out in the global marketplace with a symbol that resonates across cultures.", 
-        category: "Graphics", 
+        id: "hd1", 
+        title: "A.M.A will build a custom Enterprise AI Solution", 
+        description: "Harness the power of Large Language Models with A.M.A's expertise. We integrate custom AI agents and neural processing into your existing workflow, specializing in global-scale automation and intelligent data synthesis for the modern world.", 
+        category: "AI & Tech", 
         images: [
-          "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=800",
-          "https://images.unsplash.com/photo-1572044162444-ad60f128bdea?q=80&w=800",
-          "https://images.unsplash.com/photo-1626785774625-ddc7c82a1e50?q=80&w=800",
-          "https://images.unsplash.com/photo-1549490349-8643362247b5?q=80&w=800"
+          "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1200&h=1200",
+          "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&q=80&w=1200&h=1200"
         ], 
         owner: "A.M.A Professional" 
       },
       { 
-        id: "g2", 
-        title: "A.M.A will develop a high-performance React application", 
-        description: "Experience the pinnacle of frontend engineering. A.M.A crafts responsive, blazing-fast web applications using React and TypeScript. From complex state management to fluid Tailwind-driven UI, our scripts are written for scalability and seamless user experiences worldwide.", 
-        category: "Programming", 
+        id: "hd2", 
+        title: "A.M.A will architect your Global Cloud Infrastructure", 
+        description: "Scalable reaching every continent. A.M.A provides multi-cloud solutions (AWS, Azure, GCP) with high-availability architectures and zero-trust security protocols, built for the modern worldwide demand.", 
+        category: "Cloud & Security", 
         images: [
-          "https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=800",
-          "https://images.unsplash.com/photo-1587620962725-abab7fe55159?q=80&w=800",
-          "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=800",
-          "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800"
-        ], 
-        owner: "A.M.A Professional" 
-      },
-      { 
-        id: "g3", 
-        title: "A.M.A will write SEO optimized global content", 
-        description: "Engage a worldwide audience with A.M.A's superior content writing. Our scripts combine linguistic precision with SEO architecture, driving organic traffic and positioning your brand as a global thought leader. We write for humans and optimize for algorithms.", 
-        category: "Writing", 
-        images: [
-          "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=800",
-          "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=800",
-          "https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?q=80&w=800",
-          "https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=800"
-        ], 
-        owner: "A.M.A Professional" 
-      },
-      { 
-        id: "g4", 
-        title: "A.M.A will manage global social media growth", 
-        description: "Navigate the digital landscape with A.M.A's strategic social media management. We deploy culturally-aware marketing scripts across Instagram, LinkedIn, and X, ensuring your brand story reaches every corner of the globe with maximum impact and engagement.", 
-        category: "Marketing", 
-        images: [
-          "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=800",
-          "https://images.unsplash.com/photo-1611926653458-09294b319dd7?q=80&w=800",
-          "https://images.unsplash.com/photo-1557838923-2985c318be48?q=80&w=800",
-          "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800"
+          "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1200&h=1200",
+          "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80&w=1200&h=1200"
         ], 
         owner: "A.M.A Professional" 
       }
@@ -127,76 +97,47 @@ async function startServer() {
 
     // Helper to generate a "unique" gig based on index
     const generateGig = (index: number) => {
-      const categories = [
-        "Graphics", "Programming", "Writing", "Marketing", "Video", "Audio", 
-        "Business", "Lifestyle", "Data", "AI Services", "Animation", "Editing",
-        "Translation", "Legal", "Finance", "Virtual Assistant", "E-commerce"
-      ];
-      const items = [
-        { cat: "Graphics", sub: "Minimalist Logo Design", keyword: "logo_minimal" },
-        { cat: "Programming", sub: "Cloud Infrastructure Setup", keyword: "server_cloud" },
-        { cat: "Writing", sub: "Professional Legal Research", keyword: "law_document" },
-        { cat: "Marketing", sub: "Social Media Ads Suite", keyword: "ads_social" },
-        { cat: "Video", sub: "Cinematic 4K Color Grading", keyword: "cinema_grading" },
-        { cat: "Audio", sub: "Podcast Mastering & Edit", keyword: "audio_mastering" },
-        { cat: "Business", sub: "Strategic Finance Planning", keyword: "finance_strategy" },
-        { cat: "Lifestyle", sub: "Personal Fitness Coaching", keyword: "gym_fitness" },
-        { cat: "Data", sub: "Advanced Machine Learning", keyword: "data_ml" },
-        { cat: "AI Services", sub: "Custom AI Agent Integration", keyword: "ai_bot" },
-        { cat: "Animation", sub: "Advanced 3D Character Rig", keyword: "animation_3d" },
-        { cat: "Editing", sub: "High-end Wedding Video Edit", keyword: "wedding_edit" },
-        { cat: "Translation", sub: "Universal Document Translate", keyword: "language_global" },
-        { cat: "Legal", sub: "Global Intellectual Property", keyword: "legal_patent" },
-        { cat: "Finance", sub: "International Tax Compliance", keyword: "tax_global" },
-        { cat: "Virtual Assistant", sub: "Executive Virtual Support", keyword: "exec_assistant" },
-        { cat: "E-commerce", sub: "Advanced Shopify Store Dev", keyword: "shopify_dev" },
-        { cat: "Programming", sub: "Real-time Data Dashboard", keyword: "web_dashboard" },
-        { cat: "Graphics", sub: "Bespoke Digital Art Collection", keyword: "digital_art" },
-        { cat: "Writing", sub: "Technical System Architecture", keyword: "tech_spec" },
-        { cat: "Marketing", sub: "Influencer Campaign Strategy", keyword: "influencer_marketing" },
-        { cat: "Video", sub: "Commercial TV Ad Production", keyword: "commercial_video" },
-        { cat: "Data", sub: "Big Data ETL Pipeline", keyword: "big_data" },
-        { cat: "Business", sub: "Venture Capital Pitch Deck", keyword: "pitch_deck" },
-        { cat: "Graphics", sub: "UI/UX Mobile App Interface", keyword: "mobile_ui" },
-        { cat: "Programming", sub: "Decentralized Smart Contracts", keyword: "blockchain_solidity" },
-        { cat: "Lifestyle", sub: "Luxury Interior Architecture", keyword: "interior_design" },
-        { cat: "AI Services", sub: "Neural Voice Transformation", keyword: "ai_voice" },
-        { cat: "Photography", sub: "Commercial Product Session", keyword: "product_photo" },
-        { cat: "Animation", sub: "Explainer Motion Graphics", keyword: "motion_graphics" }
+      const highDemandItems = [
+        { cat: "AI & Tech", sub: "NLP & LLM Integration", keyword: "artificial_intelligence", id: "photo-1677442136019-21780ecad995" },
+        { cat: "Cloud & Security", sub: "Global Cyber Security Audit", keyword: "cybersecurity", id: "photo-1544197150-b99a580bb7a8" },
+        { cat: "Development", sub: "Scalable Fintech Platforms", keyword: "fintech", id: "photo-1551288049-bebda4e38f71" },
+        { cat: "Data Science", sub: "Predictive Analytics Architecture", keyword: "data_science", id: "photo-1551288049-bebda4e38f71" },
+        { cat: "AI & Tech", sub: "Computer Vision Systems", keyword: "ai_vision", id: "photo-1593508512255-86ab42a8e620" },
+        { cat: "Development", sub: "Web3 Smart Contract Security", keyword: "blockchain", id: "photo-1639762681485-074b7f938ba0" },
+        { cat: "Design", sub: "High-Tier Digital Product Strategy", keyword: "ux_design", id: "photo-1581291518633-83b4ebd1d83e" },
+        { cat: "AI & Tech", sub: "Generative AI Artistry", keyword: "neural_art", id: "photo-1593508512255-86ab42a8e620" }
       ];
       
-      const item = items[index % items.length];
+      const item = highDemandItems[index % highDemandItems.length];
       const cat = item.cat;
       const sub = item.sub;
-      const key = item.keyword;
+      const imgId = item.id;
 
       const scripts = [
-        `Empower your project with A.M.A's specialized ${cat.toLowerCase()} mastery. We deliver professional ${sub} crafted for the highest tier of global excellence.`,
-        `A.M.A provides top-tier ${sub} results by combining technical rigor with creative vision. Our worldwide network ensures your ${cat.toLowerCase()} goals are achieved with distinction.`,
-        `Revolutionize your workflow with A.M.A's premium ${cat.toLowerCase()} offerings. We specialize in accurate ${sub} delivery, serving high-profile global clients.`,
-        `Superior ${sub} by A.M.A. Our refined English documentation and technical precision establish us as the leading choice for critical ${cat.toLowerCase()} initiatives.`,
-        `Drive global impact with A.M.A's elite ${cat.toLowerCase()} experts. Our focus on ${sub} ensures every deliverable meets the peerless standards of the A.M.A brand.`
+        `Empower your global enterprise with A.M.A's specialized ${cat} mastery. We deliver high-demand ${sub} solutions tailored for modern excellence.`,
+        `A.M.A delivers precision-engineered ${sub} that drives worldwide growth. Our elite network ensures your ${cat} requirements are met with peerless quality.`,
+        `Experience the future of global services with A.M.A's high-demand ${cat} suite. We specialize in accurate ${sub} delivery for international brands.`,
+        `Superior ${sub} by A.M.A. Our refined technical execution and strategic insight make us the leading partner for critical ${cat} projects globally.`
       ];
 
       const script = scripts[index % scripts.length];
       const owner = "A.M.A Professional";
       
-      // We use index, category, and keyword to ensure the seed is highly unique
-      const seedBase = `ama_v4_${cat}_${key}_idx${index}`;
-      
+      // Use direct Unsplash IDs for maximum stability
+      const images = [
+        `https://images.unsplash.com/${imgId}?auto=format&fit=crop&q=80&w=1200&h=1200`,
+        `https://images.unsplash.com/photo-1510511459019-5dee995d3ff4?auto=format&fit=crop&q=80&w=1200&h=1200`
+      ];
+
       return {
-        id: `ama_gig_${index}`,
-        title: `A.M.A will provide expert ${sub} for your global brand #${index + 5000}`,
-        description: `${script} This A.M.A service is precisely engineered for performance and global delivery. Includes multi-region support and A.M.A verified quality.`,
+        id: `ama_hd_${index}`,
+        title: `A.M.A will provide elite ${sub} service #${index + 7000}`,
+        description: `${script} This A.M.A service is precisely engineered for high-demand performance and global delivery. Includes A.M.A verified global quality standards.`,
         category: cat,
-        images: [
-          `https://picsum.photos/seed/${seedBase}_p/1000/1000`,
-          `https://picsum.photos/seed/${seedBase}_a1/1000/1000`,
-          `https://picsum.photos/seed/${seedBase}_a2/1000/1000`,
-          `https://picsum.photos/seed/${seedBase}_a3/1000/1000`
-        ],
+        images: images,
         owner: owner,
-        isVideo: cat === "Video" || cat === "Animation" || cat === "Editing"
+        isVideo: false,
+        sub: sub
       };
     };
 

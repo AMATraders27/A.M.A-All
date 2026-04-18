@@ -71,17 +71,13 @@ export default function ProductDetails() {
         <div className="bg-white p-8 grid grid-cols-1 lg:grid-cols-2 gap-12 shadow-sm">
           {/* Gallery */}
           <div className="space-y-4">
-            <div className="relative aspect-square bg-white border border-border overflow-hidden">
+            <div className="relative aspect-square bg-[#131921] border border-border overflow-hidden">
               <img 
                 src={product.images[activeImage]} 
                 alt={product.title} 
-                className="w-full h-full object-contain p-8"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 referrerPolicy="no-referrer"
               />
-              {/* A.M.A Watermark */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-10">
-                <span className="text-6xl font-black italic tracking-[0.2em] text-[#131921] rotate-[-45deg] select-none">A.M.A PROFESSIONAL</span>
-              </div>
             </div>
             <div className="flex gap-4">
               {product.images.map((img, i) => (
@@ -91,9 +87,6 @@ export default function ProductDetails() {
                   className={`relative w-24 h-24 border-2 transition-all ${activeImage === i ? 'border-green-500' : 'border-border grayscale hover:grayscale-0'}`}
                 >
                   <img src={img} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5">
-                    <span className="text-[8px] font-black italic text-black rotate-[-45deg]">A.M.A</span>
-                  </div>
                 </button>
               ))}
             </div>

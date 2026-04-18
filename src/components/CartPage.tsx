@@ -45,7 +45,7 @@ export default function CartPage() {
                       className="flex flex-col sm:flex-row gap-6 pb-8 border-b border-border last:border-0"
                     >
                       <div className="w-32 h-32 bg-gray-50 border border-border flex-shrink-0">
-                        <img src={item.image} alt={item.title} className="w-full h-full object-contain p-2" />
+                        <img src={item.image} alt={item.title} className="w-full h-full object-contain p-2" referrerPolicy="no-referrer" />
                       </div>
                       <div className="flex-1 space-y-4">
                         <div className="flex justify-between items-start gap-4">

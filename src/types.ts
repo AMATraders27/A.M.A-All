@@ -6,6 +6,7 @@ export interface Product {
   category: string;
   images: string[];
   owner?: string;
+  sub?: string;
 }
 
 export interface CartItem {

@@ -26,7 +26,6 @@ export default function Portfolio() {
   const [filter, setFilter] = useState("All");
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
   const [copiedText, setCopiedText] = useState<string|null>(null);
 
   const categories = [
@@ -40,34 +39,11 @@ export default function Portfolio() {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/products?category=${filter}&q=${searchQuery}&page=1&limit=12`);
+      const response = await fetch(`/api/products?category=${filter}&q=${searchQuery}&page=1&limit=20`);
       const data = await response.json();
       setProducts(data);
-      setPage(1);
     } catch (error) {
       console.error("Error fetching products:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadMore = async () => {
-    setLoading(true);
-    try {
-      const nextPage = page + 1;
-      // We explicitly send limit/offset or page. Since the server now supports 'page', we'll use that.
-      const response = await fetch(`/api/products?category=${filter}&q=${searchQuery}&page=${nextPage}&limit=12`);
-      const data = await response.json();
-      
-      // Filter out any potential duplicates by ID just in case
-      setProducts(prev => {
-        const existingIds = new Set(prev.map(p => p.id));
-        const newItems = data.filter((p: Product) => !existingIds.has(p.id));
-        return [...prev, ...newItems];
-      });
-      setPage(nextPage);
-    } catch (error) {
-      console.error("Error loading more:", error);
     } finally {
       setLoading(false);
     }
@@ -91,7 +67,7 @@ export default function Portfolio() {
       <div className="bg-black text-white py-2 px-4 sticky top-0 z-[100] border-b border-white/5">
         <div className="max-w-[1600px] mx-auto flex justify-center sm:justify-between items-center text-[10px] sm:text-xs font-medium uppercase tracking-[0.2em]">
           <div className="hidden sm:flex items-center gap-6">
-            <span className="text-gray-500 italic">Professional Freelance Services</span>
+            <span className="text-gray-500 italic">Global High-Demand Skills</span>
             <div className="flex items-center gap-2 text-green-500">
               <ShieldCheck className="w-3 h-3" />
               <span>A.M.A Verified Provider</span>
@@ -148,16 +124,7 @@ export default function Portfolio() {
       </nav>
 
       {/* Hero */}
-      <section className="pt-26 relative">
-        <div className="absolute inset-0 h-[600px] overflow-hidden">
-          <img 
-            src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2000&auto=format&fit=crop" 
-            className="w-full h-full object-cover opacity-30 grayscale"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/80 to-background" />
-        </div>
-        
+      <section className="pt-26 relative bg-black/90">
         <div className="max-w-[1500px] mx-auto px-4 relative pt-32 pb-24 text-center">
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
@@ -185,10 +152,10 @@ export default function Portfolio() {
           <div className="flex items-center justify-between mb-12">
             <div className="space-y-1">
               <h2 className="text-3xl font-bold tracking-tight italic">
-                {searchQuery ? `Searching for "${searchQuery}"` : "Infinite Gigs"}
+                {searchQuery ? `Searching for "${searchQuery}"` : "Elite High-Demand Skills"}
               </h2>
               <p className="text-xs text-muted-foreground uppercase tracking-widest">
-                Exploring 10M+ Services in {filter}
+                A.M.A Verified Global Portfolio
               </p>
             </div>
             <div className="h-[2px] flex-1 bg-border mx-8 hidden sm:block" />
@@ -205,25 +172,16 @@ export default function Portfolio() {
                   exit={{ opacity: 0, scale: 0.9 }}
                   className="bg-white group overflow-hidden border border-border hover:shadow-2xl transition-all duration-300 flex flex-col"
                 >
-                  <div className="relative aspect-square overflow-hidden bg-gray-50">
+                  <div className="relative aspect-square overflow-hidden bg-[#131921]">
                     <Link to={`/product/${product.id}`} className="relative block h-full">
                       <img 
                         src={product.images[0]} 
                         alt={product.title} 
-                        className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                         referrerPolicy="no-referrer"
                       />
-                      {/* A.M.A Professional Watermark Overlay */}
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity">
-                        <span className="text-4xl font-black italic tracking-widest text-[#131921] rotate-[-45deg] select-none">A.M.A PROFESSIONAL</span>
-                      </div>
                     </Link>
-                    <div className="absolute top-4 right-4 space-y-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button size="icon" variant="secondary" className="rounded-full shadow-lg">
-                        <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                      </Button>
-                    </div>
-                    <Badge className="absolute top-4 left-4 rounded-none bg-black/80 text-white border-0">
+                    <Badge className="absolute top-4 left-4 rounded-none bg-green-500 text-black font-bold border-0 uppercase text-[8px] tracking-widest">
                       {product.category}
                     </Badge>
                   </div>
@@ -252,7 +210,7 @@ export default function Portfolio() {
                           onClick={() => handleOrderViaWhatsApp(product)}
                           className="w-full rounded-none bg-green-600 hover:bg-green-700 text-white text-[10px] uppercase tracking-widest h-12 flex items-center justify-center gap-2"
                         >
-                          <MessageCircle className="w-4 h-4" /> Message Seller
+                          <MessageCircle className="w-4 h-4" /> Message Service Provider
                         </Button>
                         <Link to={`/product/${product.id}`} className="block">
                           <Button variant="outline" className="w-full rounded-none border-white/20 text-white hover:bg-white/10 text-[10px] uppercase tracking-widest h-10">
@@ -266,23 +224,6 @@ export default function Portfolio() {
               ))}
             </AnimatePresence>
           </div>
-
-          {products.length > 0 && (
-            <div className="mt-16 flex flex-col items-center gap-6">
-              <div className="flex items-center gap-4 w-full">
-                <div className="h-[1px] flex-1 bg-border" />
-                <p className="text-[10px] uppercase tracking-[0.5em] text-gray-400">Deep Archive Access</p>
-                <div className="h-[1px] flex-1 bg-border" />
-              </div>
-              <Button 
-                onClick={loadMore}
-                disabled={loading}
-                className="rounded-none bg-black text-white px-12 h-14 uppercase tracking-[0.3em] font-bold text-xs hover:bg-primary transition-all shadow-xl disabled:opacity-50"
-              >
-                {loading ? "Discovering..." : "Load More Excellence"}
-              </Button>
-            </div>
-          )}
 
           {products.length === 0 && !loading && (
             <div className="text-center py-24 bg-gray-50 border border-dashed border-gray-300">
