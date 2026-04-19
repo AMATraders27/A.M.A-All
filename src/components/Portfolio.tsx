@@ -249,7 +249,7 @@ export default function Portfolio() {
           {products.length === 0 && !loading && (
             <div className="text-center py-24 bg-gray-50 border border-dashed border-gray-300 px-6">
               <h3 className="text-2xl font-bold italic mb-2">No items matching your request</h3>
-              <p className="text-muted-foreground font-light italic mb-8">The archive is vast, but "${searchQuery}" remains elusive. <br /> Try a broader search term.</p>
+              <p className="text-muted-foreground font-light italic mb-8">The archive is vast, but "{searchQuery}" remains elusive. <br /> Try a broader search term.</p>
               
               <div className="flex flex-wrap justify-center gap-3">
                 {broadTerms.map(term => (
