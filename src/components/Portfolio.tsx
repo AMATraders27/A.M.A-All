@@ -33,14 +33,6 @@ export default function Portfolio() {
     "All"
   ];
 
-  const broadTerms = [
-    "Artificial Intelligence",
-    "Cyber Security",
-    "Cloud Architecture",
-    "Blockchain Expert",
-    "Fintech Solutions"
-  ];
-
   useEffect(() => {
     fetchProducts();
   }, [filter, searchQuery]);
@@ -149,19 +141,6 @@ export default function Portfolio() {
               Bespoke digital solutions crafted with precision and professional integrity by A.M.A. 
             </p>
 
-            <div className="flex flex-wrap justify-center gap-3 mb-12">
-              <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold self-center mr-2">Broad Search Terms:</span>
-              {broadTerms.map(term => (
-                <button
-                  key={term}
-                  onClick={() => setSearchQuery(term)}
-                  className="px-4 py-2 border border-white/10 text-[10px] text-gray-300 uppercase tracking-widest hover:bg-green-500 hover:text-black hover:border-green-500 transition-all italic font-medium"
-                >
-                  {term}
-                </button>
-              ))}
-            </div>
-
             <Button onClick={() => window.scrollTo({ top: 800, behavior: 'smooth' })} size="lg" className="rounded-none px-16 h-16 bg-white text-black hover:bg-green-500 hover:text-white transition-all font-black uppercase tracking-widest text-[12px] border-none shadow-2xl">
               Explore Services
             </Button>
@@ -173,16 +152,13 @@ export default function Portfolio() {
       <div className="bg-background">
         {/* Product Grid */}
         <section className="max-w-[1500px] mx-auto px-4 py-12">
-          <div className="flex items-center justify-between mb-12">
-            <div className="space-y-1">
-              <h2 className="text-3xl font-bold tracking-tight italic">
-                {searchQuery ? `Searching for "${searchQuery}"` : "Elite High-Demand Skills"}
-              </h2>
-              <p className="text-xs text-muted-foreground uppercase tracking-widest">
-                A.M.A Verified Global Portfolio
-              </p>
-            </div>
-            <div className="h-[2px] flex-1 bg-border mx-8 hidden sm:block" />
+          {/* Blue and Red Line for Overall Services */}
+          <div className="flex items-center gap-6 mb-12">
+            <div className="h-1 flex-1 bg-gradient-to-r from-blue-600 to-red-600 animate-pulse hidden sm:block" />
+            <h2 className="text-4xl font-black tracking-[0.2em] uppercase text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-red-500">
+              Overall Services
+            </h2>
+            <div className="h-1 flex-1 bg-gradient-to-r from-red-600 to-blue-600 animate-pulse hidden sm:block" />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -245,25 +221,6 @@ export default function Portfolio() {
               ))}
             </AnimatePresence>
           </div>
-
-          {products.length === 0 && !loading && (
-            <div className="text-center py-24 bg-gray-50 border border-dashed border-gray-300 px-6">
-              <h3 className="text-2xl font-bold italic mb-2">No items matching your request</h3>
-              <p className="text-muted-foreground font-light italic mb-8">Try adjusting your search or explore our high-demand professional categories below.</p>
-              
-              <div className="flex flex-wrap justify-center gap-3">
-                {broadTerms.map(term => (
-                  <button
-                    key={term}
-                    onClick={() => setSearchQuery(term)}
-                    className="px-6 py-3 bg-white border border-border text-[10px] text-black uppercase tracking-[0.2em] font-bold hover:bg-black hover:text-white transition-all shadow-sm"
-                  >
-                    {term}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
         </section>
 
         {/* Footer */}
