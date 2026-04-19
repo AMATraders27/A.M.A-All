@@ -148,6 +148,96 @@ export default function Portfolio() {
         </div>
       </section>
 
+      {/* Text-Based Complete Services Archival List */}
+      <section className="bg-black text-white pt-20 pb-12 border-b border-white/10">
+        <div className="max-w-[1500px] mx-auto px-4">
+          <div className="mb-16 text-center">
+             <h2 className="text-3xl md:text-5xl font-black uppercase tracking-[0.2em] italic mb-4">Complete Archive of Skills</h2>
+             <p className="text-gray-400 font-light italic max-w-2xl mx-auto">Explore the full catalog of A.M.A's verified technical and creative capabilities.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+            
+            {/* Business Services */}
+            <div className="space-y-6">
+              <h3 className="text-xl font-bold tracking-widest text-green-500 uppercase border-b border-white/20 pb-4 mb-6">💼 Professional & Business Services</h3>
+              <ul className="space-y-6 list-decimal list-inside text-sm text-gray-300 font-light marker:text-white marker:font-bold">
+                <li className="pl-2">
+                  <span className="font-bold text-white tracking-wider">LinkedIn Marketing:</span>
+                  <p className="mt-1 pl-6 italic break-words border-l-2 border-white/10 text-gray-400">"I will optimize your LinkedIn profile and business page for maximum growth."</p>
+                </li>
+                <li className="pl-2">
+                  <span className="font-bold text-white tracking-wider">Case Study Writing:</span>
+                  <p className="mt-1 pl-6 italic break-words border-l-2 border-white/10 text-gray-400">"I will write a professional business case study and conduct tech research."</p>
+                </li>
+              </ul>
+            </div>
+
+            {/* Creative Services */}
+            <div className="space-y-6">
+              <h3 className="text-xl font-bold tracking-widest text-emerald-400 uppercase border-b border-white/20 pb-4 mb-6">🎨 Creative & Design Services</h3>
+              <ul className="space-y-6 list-decimal list-inside text-sm text-gray-300 font-light marker:text-white marker:font-bold">
+                <li className="pl-2">
+                  <span className="font-bold text-white tracking-wider">WhatsApp Sticker Creation:</span>
+                  <p className="mt-1 pl-6 italic break-words border-l-2 border-white/10 text-gray-400">"I will design custom branded WhatsApp stickers and animated sticker packs."</p>
+                </li>
+                <li className="pl-2">
+                  <span className="font-bold text-white tracking-wider">Spotify Banner Design:</span>
+                  <p className="mt-1 pl-6 italic break-words border-l-2 border-white/10 text-gray-400">"I will design an eye-catching Spotify banner for your artist profile."</p>
+                </li>
+                <li className="pl-2">
+                  <span className="font-bold text-white tracking-wider">App Icon Design:</span>
+                  <p className="mt-1 pl-6 italic break-words border-l-2 border-white/10 text-gray-400">"I will design a stunning mobile app icon for iOS and Android."</p>
+                </li>
+              </ul>
+            </div>
+
+            {/* AI Services */}
+            <div className="space-y-6">
+              <h3 className="text-xl font-bold tracking-widest text-teal-400 uppercase border-b border-white/20 pb-4 mb-6">🤖 AI & Tech-Focused Services</h3>
+              <ul className="space-y-6 list-decimal list-inside text-sm text-gray-300 font-light marker:text-white marker:font-bold">
+                <li className="pl-2">
+                  <span className="font-bold text-white tracking-wider">AI Services:</span>
+                  <p className="mt-1 pl-6 italic break-words border-l-2 border-white/10 text-gray-400">"I will create unique AI avatars and edit images using Midjourney."</p>
+                </li>
+                <li className="pl-2">
+                  <span className="font-bold text-white tracking-wider">Video Specialities:</span>
+                  <p className="mt-1 pl-6 italic break-words border-l-2 border-white/10 text-gray-400">"I will create a cinematic book trailer and eLearning video production."</p>
+                </li>
+                <li className="pl-2">
+                  <span className="font-bold text-white tracking-wider">Ad Copywriting:</span>
+                  <p className="mt-1 pl-6 italic break-words border-l-2 border-white/10 text-gray-400">"I will write high-converting Instagram Reel ads and modern ad copy."</p>
+                </li>
+                <li className="pl-2">
+                  <span className="font-bold text-white tracking-wider">Tech Niche:</span>
+                  <p className="mt-1 pl-6 italic break-words border-l-2 border-white/10 text-gray-400">"I will develop custom Twitch overlays and tools for streamers."</p>
+                </li>
+              </ul>
+            </div>
+
+            {/* Modern Digital Skills */}
+            <div className="space-y-6">
+              <h3 className="text-xl font-bold tracking-widest text-cyan-400 uppercase border-b border-white/20 pb-4 mb-6">🚀 Modern Digital Skills</h3>
+              <ul className="space-y-6 list-decimal list-inside text-sm text-gray-300 font-light marker:text-white marker:font-bold">
+                <li className="pl-2">
+                  <span className="font-bold text-white tracking-wider">Video Editing:</span>
+                  <p className="mt-1 pl-6 italic break-words border-l-2 border-white/10 text-gray-400">"I will provide high-end, cinematic video editing for YouTube and social media growth."</p>
+                </li>
+                <li className="pl-2">
+                  <span className="font-bold text-white tracking-wider">Graphic Designing:</span>
+                  <p className="mt-1 pl-6 italic break-words border-l-2 border-white/10 text-gray-400">"I will craft bold modern graphic design layouts and custom branding packages."</p>
+                </li>
+                <li className="pl-2">
+                  <span className="font-bold text-white tracking-wider">Thumbnail Maker:</span>
+                  <p className="mt-1 pl-6 italic break-words border-l-2 border-white/10 text-gray-400">"I will design viral, high-converting thumbnail art that guarantees high click-through rates."</p>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       {/* Main Grid Section */}
       <div className="bg-background">
         {/* Product Grid */}
