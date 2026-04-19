@@ -44,8 +44,8 @@ export default function CartPage() {
                       exit={{ opacity: 0, x: 20 }}
                       className="flex flex-col sm:flex-row gap-6 pb-8 border-b border-border last:border-0"
                     >
-                      <div className="w-32 h-32 bg-gray-50 border border-border flex-shrink-0">
-                        <img src={item.image} alt={item.title} className="w-full h-full object-contain p-2" referrerPolicy="no-referrer" />
+                      <div className="w-32 h-32 bg-[#131921] border border-border flex-shrink-0 flex items-center justify-center p-2 text-center">
+                        <span className="text-white font-bold text-[10px] uppercase tracking-[0.2em] italic">{item.category || "A.M.A Service"}</span>
                       </div>
                       <div className="flex-1 space-y-4">
                         <div className="flex justify-between items-start gap-4">

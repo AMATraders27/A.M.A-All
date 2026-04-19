@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "motion/react";
-import { ArrowLeft, Star, Share2, ShieldCheck, Truck, RefreshCcw, MessageCircle, Phone, Mail, Copy, Monitor, Code2 } from "lucide-react";
+import { ArrowLeft, Star, Share2, ShieldCheck, Truck, RefreshCcw, MessageCircle, ShoppingBag, Phone, Mail, Copy, Monitor, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Product } from "@/src/types";
@@ -34,7 +34,7 @@ export default function ProductDetails() {
 
   const handleOrderViaWhatsApp = () => {
     if (!product) return;
-    const message = `Hello A.M.A Freelancing!\nI am viewing your gig: ${product.title}\nCategory: ${product.category}\n\nI would like to discuss this service further with A.M.A.`;
+    const message = `Hello A.M.A Freelancing!\nI want to Hire your service: ${product.title}\nCategory: ${product.category}\n\nI would like to finalize the hiring process for this service with A.M.A.`;
     const encoded = encodeURIComponent(message);
     window.open(`https://wa.me/9203054242038?text=${encoded}`, "_blank");
   };
@@ -71,24 +71,15 @@ export default function ProductDetails() {
         <div className="bg-white p-8 grid grid-cols-1 lg:grid-cols-2 gap-12 shadow-sm">
           {/* Gallery */}
           <div className="space-y-4">
-            <div className="relative aspect-square bg-[#131921] border border-border overflow-hidden">
-              <img 
-                src={product.images[activeImage]} 
-                alt={product.title} 
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                referrerPolicy="no-referrer"
-              />
+            <div className="relative aspect-square bg-[#131921] border border-border overflow-hidden flex items-center justify-center p-8 text-center">
+              <h2 className="text-4xl md:text-5xl font-black italic text-white uppercase tracking-wider leading-tight">{product.category}</h2>
+              <span className="absolute bottom-6 text-green-500 text-xs font-bold tracking-[0.3em] uppercase">Premium Service Tier</span>
+              <span className="absolute top-6 left-6 text-white text-[10px] font-bold tracking-[0.3em] uppercase border border-white/20 px-3 py-1 bg-black/50">A.M.A Verified</span>
             </div>
             <div className="flex gap-4">
-              {product.images.map((img, i) => (
-                <button 
-                  key={i}
-                  onClick={() => setActiveImage(i)}
-                  className={`relative w-24 h-24 border-2 transition-all ${activeImage === i ? 'border-green-500' : 'border-border grayscale hover:grayscale-0'}`}
-                >
-                  <img src={img} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                </button>
-              ))}
+              <div className="relative w-24 h-24 border-2 transition-all border-green-500 bg-[#131921] flex items-center justify-center">
+                 <span className="text-green-500 font-bold uppercase text-[8px] tracking-[0.2em] italic text-center px-1">Main<br/>Service</span>
+              </div>
             </div>
           </div>
 
@@ -152,7 +143,7 @@ export default function ProductDetails() {
                 onClick={handleOrderViaWhatsApp}
                 className="w-full h-16 rounded-none bg-green-600 hover:bg-green-700 text-white font-bold uppercase tracking-[0.3em] text-[12px] shadow-xl flex items-center justify-center gap-3"
               >
-                Contact A.M.A <MessageCircle className="w-5 h-5" />
+                Hire Services Now <ShoppingBag className="w-5 h-5" />
               </Button>
             </div>
           </div>
@@ -165,8 +156,8 @@ export default function ProductDetails() {
             {relatedProducts.length > 0 ? (
               relatedProducts.map(rp => (
                 <Link key={rp.id} to={`/product/${rp.id}`} className="bg-white overflow-hidden border border-border group hover:shadow-xl transition-all p-4">
-                  <div className="aspect-square bg-gray-50 mb-4 overflow-hidden">
-                    <img src={rp.images[0]} alt={rp.title} className="w-full h-full object-contain group-hover:scale-110 transition-transform" referrerPolicy="no-referrer" />
+                  <div className="aspect-square bg-[#131921] mb-4 overflow-hidden flex items-center justify-center p-4 text-center group-hover:bg-black transition-colors">
+                    <span className="text-white font-bold italic text-sm uppercase tracking-wider">{rp.category}</span>
                   </div>
                   <h3 className="font-bold italic truncate text-sm mb-2">{rp.title}</h3>
                   <p className="text-green-500 font-bold uppercase text-[10px]">Hire Expert</p>

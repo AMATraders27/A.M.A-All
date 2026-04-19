@@ -6,6 +6,7 @@ import {
   Menu, 
   Star, 
   MessageCircle, 
+  ShoppingBag,
   Phone, 
   Mail, 
   Copy,
@@ -64,7 +65,7 @@ export default function Portfolio() {
   };
 
   const handleOrderViaWhatsApp = (product: Product) => {
-    const message = `Hello A.M.A Freelancing, I am interested in your service: ${product.title}. Can we discuss the details?`;
+    const message = `Hello A.M.A Freelancing, I would like to Hire your service: ${product.title}. Please provide details on how to proceed.`;
     const whatsappUrl = `https://wa.me/9203054242038?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -74,7 +75,8 @@ export default function Portfolio() {
       {/* Top Header Contact Bar */}
       <div className="bg-black text-white py-2 px-4 sticky top-0 z-[100] border-b border-white/5">
         <div className="max-w-[1600px] mx-auto flex justify-center sm:justify-between items-center text-[10px] sm:text-xs font-medium uppercase tracking-[0.2em]">
-          <div className="hidden sm:flex items-center gap-6">
+          <div className="hidden lg:flex items-center gap-6">
+            <span className="text-white font-black bg-green-500 px-2 py-0.5 rounded-sm">SITE TYPE: HIGH-DEMAND SERVICE BOUTIQUE</span>
             <span className="text-gray-500 italic">Global High-Demand Skills</span>
             <div className="flex items-center gap-2 text-green-500">
               <ShieldCheck className="w-3 h-3" />
@@ -194,17 +196,14 @@ export default function Portfolio() {
                   exit={{ opacity: 0, scale: 0.9 }}
                   className="bg-white group overflow-hidden border border-border hover:shadow-2xl transition-all duration-300 flex flex-col"
                 >
-                  <div className="relative aspect-square overflow-hidden bg-[#131921]">
-                    <Link to={`/product/${product.id}`} className="relative block h-full">
-                      <img 
-                        src={product.images[0]} 
-                        alt={product.title} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                        referrerPolicy="no-referrer"
-                      />
-                    </Link>
-                    <Badge className="absolute top-4 left-4 rounded-none bg-green-500 text-black font-bold border-0 uppercase text-[8px] tracking-widest">
-                      {product.category}
+                  <div className="relative aspect-square overflow-hidden bg-[#131921] border-b border-border flex items-center justify-center p-6 text-center">
+                    <Link to={`/product/${product.id}`} className="absolute inset-0 z-10 block" />
+                    <h4 className="text-3xl font-black italic tracking-widest text-white uppercase leading-tight">
+                       {product.category}
+                    </h4>
+                    <span className="absolute bottom-6 text-green-500 text-[10px] font-bold tracking-[0.3em] uppercase">Premium Service Tier</span>
+                    <Badge className="absolute top-4 left-4 rounded-none bg-green-500 text-black font-bold border-0 uppercase text-[8px] tracking-widest z-20">
+                      A.M.A Verified
                     </Badge>
                   </div>
 
@@ -232,7 +231,7 @@ export default function Portfolio() {
                           onClick={() => handleOrderViaWhatsApp(product)}
                           className="w-full rounded-none bg-green-600 hover:bg-green-700 text-white text-[10px] uppercase tracking-widest h-12 flex items-center justify-center gap-2"
                         >
-                          <MessageCircle className="w-4 h-4" /> Message Service Provider
+                          <ShoppingBag className="w-4 h-4" /> Hire Services
                         </Button>
                         <Link to={`/product/${product.id}`} className="block">
                           <Button variant="outline" className="w-full rounded-none border-white/20 text-white hover:bg-white/10 text-[10px] uppercase tracking-widest h-10">
